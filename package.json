@@ -1,0 +1,26 @@
+{
+  "name": "nexora-news",
+  "version": "2.0.0",
+  "description": "Nexora News — Your World, Your News. A full-featured news dashboard with weather, live location, bookmarks, community submissions, and AI content moderation.",
+  "main": "server.js",
+  "type": "module",
+  "bin": {
+    "nexora": "./bin/index.js"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "web": "node server.js",
+    "cli": "node bin/index.js"
+  },
+  "dependencies": {
+    "@inquirer/prompts": "^7.1.0",
+    "commander": "^11.1.0",
+    "express": "^5.2.1",
+    "open": "^10.1.0",
+    "picocolors": "^1.1.1",
+    "rss-parser": "^3.13.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
