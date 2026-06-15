@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Nexora News — Your World, Your News. Live headlines, weather, bookmarks, and community-submitted stories all in one place.">
+  <title>Nexora News — Your World, Your News</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📰</text></svg>">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="index.css">
+</head>
+<body class="dark-theme">
+<div class="app-container">
+
+  <!-- ═══════════════════════════════════════ SIDEBAR ═══════════════════════════════════════ -->
+  <aside class="sidebar" id="sidebar">
+    <!-- Brand -->
+    <div class="sidebar-brand">
+      <div class="brand-logo">
+        <span class="logo-n">N</span><span class="logo-ex">exora</span>
+      </div>
+      <span class="brand-tag">Your World, Your News</span>
+    </div>
+
+    <!-- Weather Widget -->
+    <div class="weather-widget" id="weather-widget">
+      <div class="weather-loading">
+        <i data-lucide="cloud"></i>
+        <span>Detecting location…</span>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="sidebar-nav" id="sidebar-nav">
+      <div class="nav-section-label">Feeds</div>
+      <button class="nav-item active" data-feed="headlines" id="nav-headlines">
+        <i data-lucide="newspaper"></i><span>Top Headlines</span>
+      </button>
+      <button class="nav-item" data-feed="nearme" id="nav-nearme">
+        <i data-lucide="map-pin"></i><span>Near Me</span>
+      </button>
+      <button class="nav-item" data-feed="bookmarks" id="nav-bookmarks">
+        <i data-lucide="bookmark"></i><span>Bookmarks</span>
+        <span class="badge" id="bookmark-count" style="display:none">0</span>
+      </button>
+      <button class="nav-item" data-feed="community" id="nav-community">
+        <i data-lucide="users"></i><span>Community</span>
+      </button>
+
+      <div class="nav-section-label">Topics</div>
+      <button class="nav-item" data-topic="WORLD"><i data-lucide="globe"></i><span>World</span></button>
+      <button class="nav-item" data-topic="NATION"><i data-lucide="flag"></i><span>Nation</span></button>
+      <button class="nav-item" data-topic="BUSINESS"><i data-lucide="briefcase"></i><span>Business</span></button>
+      <button class="nav-item" data-topic="TECHNOLOGY"><i data-lucide="cpu"></i><span>Technology</span></button>
+      <button class="nav-item" data-topic="ENTERTAINMENT"><i data-lucide="clapperboard"></i><span>Entertainment</span></button>
+      <button class="nav-item" data-topic="SPORTS"><i data-lucide="trophy"></i><span>Sports</span></button>
+      <button class="nav-item" data-topic="SCIENCE"><i data-lucide="flask-conical"></i><span>Science</span></button>
+      <button class="nav-item" data-topic="HEALTH"><i data-lucide="heart-pulse"></i><span>Health</span></button>
+    </nav>
+
+    <!-- Sidebar Footer -->
+    <div class="sidebar-footer">
+      <button class="footer-btn highlight" id="submit-news-btn">
+        <i data-lucide="plus-circle"></i><span>Submit News</span>
+      </button>
+      <button class="footer-btn" id="settings-trigger">
+        <i data-lucide="settings"></i><span>Preferences</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ═══════════════════════════════════════ MAIN CONTENT ═══════════════════════════════════════ -->
+  <main class="main-content">
+
+    <!-- Top Header -->
+    <header class="top-header">
+      <button class="hamburger" id="hamburger-btn">
+        <i data-lucide="menu"></i>
+      </button>
+
+      <form id="search-form" class="search-bar">
+        <i data-lucide="search" class="search-icon"></i>
+        <input type="text" id="search-input" placeholder="Search latest news…" autocomplete="off">
+        <button type="submit" class="search-submit-btn" id="search-btn">Search</button>
+      </form>
+
+      <div class="header-actions">
+        <button id="theme-toggle" class="icon-btn" title="Toggle Light / Dark">
+          <i data-lucide="sun" class="icon-sun"></i>
+          <i data-lucide="moon" class="icon-moon"></i>
+        </button>
+        <div class="region-chip" id="region-chip">
+          <i data-lucide="languages"></i>
+          <span id="region-label">US · en</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Feed Content -->
+    <section class="dashboard-body">
+      <div class="feed-header">
+        <div>
+          <h1 id="feed-title">Top Headlines</h1>
+          <p id="feed-subtitle">Latest stories curated for you</p>
+        </div>
+        <button class="btn btn-ghost" id="refresh-btn">
+          <i data-lucide="refresh-cw"></i><span>Refresh</span>
+        </button>
+      </div>
+
+      <!-- News Grid -->
+      <div class="news-grid" id="news-grid">
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+      </div>
+    </section>
+  </main>
+
+</div>
+
+<!-- ═══════════════════════════════════════ MODALS ═══════════════════════════════════════ -->
+
+<!-- Preferences Modal -->
+<div class="modal-overlay" id="settings-modal">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h2><i data-lucide="settings-2"></i> Preferences</h2>
+      <button class="close-btn" data-close="settings-modal"><i data-lucide="x"></i></button>
+    </div>
+    <form id="settings-form" class="modal-body">
+      <div class="form-row">
+        <div class="form-group">
+          <label>🌍 Country / Region</label>
+          <div class="select-wrap">
+            <select id="country-select">
+              <option value="US">🇺🇸 United States</option>
+              <option value="GB">🇬🇧 United Kingdom</option>
+              <option value="CA">🇨🇦 Canada</option>
+              <option value="AU">🇦🇺 Australia</option>
+              <option value="IN">🇮🇳 India</option>
+              <option value="DE">🇩🇪 Germany</option>
+              <option value="FR">🇫🇷 France</option>
+              <option value="JP">🇯🇵 Japan</option>
+              <option value="BR">🇧🇷 Brazil</option>
+              <option value="MX">🇲🇽 Mexico</option>
+              <option value="ZA">🇿🇦 South Africa</option>
+              <option value="KR">🇰🇷 South Korea</option>
+              <option value="SG">🇸🇬 Singapore</option>
+              <option value="AE">🇦🇪 UAE</option>
+              <option value="NG">🇳🇬 Nigeria</option>
+              <option value="PK">🇵🇰 Pakistan</option>
+            </select>
+            <i data-lucide="chevron-down"></i>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>🗣️ Language</label>
+          <div class="select-wrap">
+            <select id="language-select">
+              <option value="en">English</option>
+              <option value="es">Español (Spanish)</option>
+              <option value="fr">Français (French)</option>
+              <option value="de">Deutsch (German)</option>
+              <option value="hi">हिंदी (Hindi)</option>
+              <option value="pt">Português (Portuguese)</option>
+              <option value="ja">日本語 (Japanese)</option>
+              <option value="ko">한국어 (Korean)</option>
+              <option value="zh">中文 (Chinese)</option>
+              <option value="ar">العربية (Arabic)</option>
+              <option value="it">Italiano (Italian)</option>
+              <option value="ru">Русский (Russian)</option>
+              <option value="nl">Nederlands (Dutch)</option>
+              <option value="tr">Türkçe (Turkish)</option>
+              <option value="ur">اردو (Urdu)</option>
+              <option value="sw">Kiswahili (Swahili)</option>
+            </select>
+            <i data-lucide="chevron-down"></i>
+          </div>
+        </div>
+      </div>
+      <p class="form-note">🌐 Changing region &amp; language fetches localized news in your native tongue.</p>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-ghost" data-close="settings-modal">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save Preferences</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Submit News Modal -->
+<div class="modal-overlay" id="submit-modal">
+  <div class="modal-card modal-wide">
+    <div class="modal-header">
+      <h2><i data-lucide="send"></i> Submit a News Article</h2>
+      <button class="close-btn" data-close="submit-modal"><i data-lucide="x"></i></button>
+    </div>
+    <div class="modal-body">
+      <!-- AI Verification Status Banner -->
+      <div id="verify-banner" style="display:none"></div>
+
+      <form id="submit-form">
+        <div class="form-group">
+          <label>📰 Article Title <span class="req">*</span></label>
+          <input type="text" id="sub-title" placeholder="Enter a clear, factual headline…" maxlength="200">
+          <span class="char-counter" id="title-counter">0 / 200</span>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>✍️ Author Name <span class="req">*</span></label>
+            <input type="text" id="sub-author" placeholder="Your name or pen name">
+          </div>
+          <div class="form-group">
+            <label>🏷️ Category</label>
+            <div class="select-wrap">
+              <select id="sub-category">
+                <option value="General">General</option>
+                <option value="WORLD">World</option>
+                <option value="NATION">Nation</option>
+                <option value="BUSINESS">Business</option>
+                <option value="TECHNOLOGY">Technology</option>
+                <option value="ENTERTAINMENT">Entertainment</option>
+                <option value="SPORTS">Sports</option>
+                <option value="SCIENCE">Science</option>
+                <option value="HEALTH">Health</option>
+              </select>
+              <i data-lucide="chevron-down"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>🔗 Source URL</label>
+          <input type="url" id="sub-url" placeholder="https://example.com/original-article">
+        </div>
+
+        <div class="form-group">
+          <label>📝 News Content <span class="req">*</span></label>
+          <textarea id="sub-content" rows="6" placeholder="Write or paste the full news content here… (minimum 50 characters)"></textarea>
+          <span class="char-counter" id="content-counter">0 chars</span>
+        </div>
+
+        <div class="form-group">
+          <label>🖼️ Image URL (optional)</label>
+          <input type="url" id="sub-image" placeholder="https://example.com/image.jpg">
+        </div>
+
+        <!-- Guidelines Checklist -->
+        <div class="guidelines-box">
+          <h4>📋 Nexora News Content Guidelines</h4>
+          <ul>
+            <li><i data-lucide="check-circle"></i> No adult, explicit or sexual content</li>
+            <li><i data-lucide="check-circle"></i> No hate speech, violence, or extremism</li>
+            <li><i data-lucide="check-circle"></i> No misleading or fabricated information</li>
+            <li><i data-lucide="check-circle"></i> Must be factual, clear, and respectful</li>
+            <li><i data-lucide="check-circle"></i> Title must not be clickbait or all-caps</li>
+          </ul>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-ghost" id="verify-btn">
+            <i data-lucide="shield-check"></i> Verify with AI
+          </button>
+          <button type="submit" class="btn btn-primary" id="final-submit-btn" disabled>
+            <i data-lucide="send"></i> Submit Article
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Article Detail Modal -->
+<div class="modal-overlay" id="article-modal">
+  <div class="modal-card modal-wide">
+    <div class="modal-header">
+      <h2 id="article-modal-source"></h2>
+      <button class="close-btn" data-close="article-modal"><i data-lucide="x"></i></button>
+    </div>
+    <div class="modal-body" id="article-modal-body"></div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
